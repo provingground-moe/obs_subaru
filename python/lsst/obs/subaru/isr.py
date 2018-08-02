@@ -560,7 +560,7 @@ class SubaruIsrTask(IsrTask):
                 xURC = xc + meshXHalf - 1
                 yURC = yc + meshYHalf - 1
 
-                bbox = afwGeom.Box2I(afwGeom.Point2I(xLLC, yLLC), afwGeom.Point2I(xURC, yURC))
+                bbox = afwGeom.Box2I(afwGeom.Point2I(xLLC, yLLC), afwGeom.Point2I(xURC, yURC), invert=False)
                 miMesh = maskedImage.Factory(exposure.getMaskedImage(), bbox, afwImage.LOCAL)
 
                 skyLevels[i, j] = afwMath.makeStatistics(miMesh, stat, statsControl).getValue()
@@ -686,7 +686,7 @@ class SuprimeCamIsrTask(SubaruIsrTask):
             self.log.info("Masking autoguider shadow at y > %d" % maskLimit)
             mask = mi.getMask()
             bbox = afwGeom.Box2I(afwGeom.Point2I(0, maskLimit - 1),
-                                 afwGeom.Point2I(mask.getWidth() - 1, height - 1))
+                                 afwGeom.Point2I(mask.getWidth() - 1, height - 1), invert=False)
             badMask = mask.Factory(mask, bbox, afwImage.LOCAL)
 
             mask.addMaskPlane("GUIDER")
@@ -696,7 +696,8 @@ class SuprimeCamIsrTask(SubaruIsrTask):
         else:
             # XXX Temporary solution until a mask plane is respected by downstream processes
             self.log.info("Removing pixels affected by autoguider shadow at y > %d" % maskLimit)
-            bbox = afwGeom.Box2I(afwGeom.Point2I(0, 0), afwGeom.Extent2I(mi.getWidth(), maskLimit))
+            bbox = afwGeom.Box2I(afwGeom.Point2I(0, 0), afwGeom.Extent2I(mi.getWidth(), maskLimit),
+                                 invert=False)
             good = mi.Factory(mi, bbox, afwImage.LOCAL)
             exposure.setMaskedImage(good)
 
@@ -744,7 +745,7 @@ class SuprimeCamMitIsrTask(SubaruIsrTask):
             self.log.info("Masking autoguider shadow at y > %d" % maskLimit)
             mask = mi.getMask()
             bbox = afwGeom.Box2I(afwGeom.Point2I(0, maskLimit - 1),
-                                 afwGeom.Point2I(mask.getWidth() - 1, height - 1))
+                                 afwGeom.Point2I(mask.getWidth() - 1, height - 1), invert=False)
             badMask = mask.Factory(mask, bbox, afwImage.LOCAL)
 
             mask.addMaskPlane("GUIDER")
@@ -754,6 +755,7 @@ class SuprimeCamMitIsrTask(SubaruIsrTask):
         else:
             # XXX Temporary solution until a mask plane is respected by downstream processes
             self.log.info("Removing pixels affected by autoguider shadow at y > %d" % maskLimit)
-            bbox = afwGeom.Box2I(afwGeom.Point2I(0, 0), afwGeom.Extent2I(mi.getWidth(), maskLimit))
+            bbox = afwGeom.Box2I(afwGeom.Point2I(0, 0), afwGeom.Extent2I(mi.getWidth(), maskLimit),
+                                 invert=False)
             good = mi.Factory(mi, bbox, afwImage.LOCAL)
             exposure.setMaskedImage(good)

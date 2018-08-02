@@ -332,7 +332,7 @@ class HscMapper(CameraMapper):
         if write:
             raise RuntimeError("Writing a psf directly is no longer permitted: write as part of a calexp")
         copyId = dataId.copy()
-        copyId['bbox'] = afwGeom.Box2I(afwGeom.Point2I(0, 0), afwGeom.Extent2I(1, 1))
+        copyId['bbox'] = afwGeom.Box2I(afwGeom.Point2I(0, 0), afwGeom.Extent2I(1, 1), invert=False)
         return self.map_calexp_sub(copyId)
 
     def std_psf(self, calexp, dataId):

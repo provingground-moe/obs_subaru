@@ -248,13 +248,15 @@ def subtractXTalk(mi, coeffs, minPixelToMask=45000, crosstalkStr="CROSSTALK"):
 
         width, height = mi.getDimensions()
         for i in range(nAmp):
-            bbox = afwGeom.BoxI(afwGeom.PointI(i*(width//nAmp), 0), afwGeom.ExtentI(width//nAmp, height))
+            bbox = afwGeom.BoxI(afwGeom.PointI(i*(width//nAmp), 0), afwGeom.ExtentI(width//nAmp, height),
+                                invert=False)
             ampI = mi.Factory(mi, bbox)
             for j in range(nAmp):
                 if i == j:
                     continue
 
-                bbox = afwGeom.BoxI(afwGeom.PointI(j*(width//nAmp), 0), afwGeom.ExtentI(width//nAmp, height))
+                bbox = afwGeom.BoxI(afwGeom.PointI(j*(width//nAmp), 0), afwGeom.ExtentI(width//nAmp, height),
+                                    invert=False)
                 if (i + j)%2 == 1:
                     ampJ = afwMath.flipImage(mi.Factory(mi, bbox), True, False)  # no need for a deep copy
                 else:

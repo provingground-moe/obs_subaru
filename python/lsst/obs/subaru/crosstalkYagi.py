@@ -195,12 +195,12 @@ def getAmplifier(image, amp, ampReference=None, offset=2):
     @return amplifier image, offset amplifier image
     """
     height = image.getHeight()
-    ampBox = afwGeom.Box2I(afwGeom.Point2I(amp*512, 0), afwGeom.Extent2I(512, height))
+    ampBox = afwGeom.Box2I(afwGeom.Point2I(amp*512, 0), afwGeom.Extent2I(512, height), invert=False)
     ampImage = image.Factory(image, ampBox, afwImage.LOCAL)
     if ampReference is not None and amp % 2 != ampReference % 2:
         ampImage = afwMath.flipImage(ampImage, True, False)
     offBox = afwGeom.Box2I(afwGeom.Point2I(offset if amp == ampReference else 0, 0),
-                           afwGeom.Extent2I(510, height))
+                           afwGeom.Extent2I(510, height), invert=False)
     offsetImage = ampImage.Factory(ampImage, offBox, afwImage.LOCAL)
     return ampImage, offsetImage
 
